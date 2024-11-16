@@ -6,39 +6,21 @@ import {
   PayCommandInput,
 } from "@worldcoin/minikit-js";
 
-const sendPayment = async () => {
-  try {
-    const res = await fetch(`/api/initiate-payment`, {
-      method: "POST",
-    });
+const PREDICTABI = require("../../ABI/Predict.json");
 
-    const { id } = await res.json();
-
-    console.log(id);
-
-    const payload: PayCommandInput = {
-      reference: id,
-      to: "0x0c892815f0B058E69987920A23FBb33c834289cf", // Test address
-      tokens: [
+const sendTransactionCommand = async () => {
+  const { commandPayload, finalPayload } =
+    await MiniKit.commandsAsync.sendTransaction({
+      transaction: [
         {
-          symbol: Tokens.WLD,
-          token_amount: tokenToDecimals(0.5, Tokens.WLD).toString(),
-        },
-        {
-          symbol: Tokens.USDCE,
-          token_amount: tokenToDecimals(0.1, Tokens.USDCE).toString(),
+          address: "0x373B210bD71C7F2e3acE1723A133D84771477eBf",
+          abi: PREDICTABI,
+          functionName: "increment",
+          args: [],
         },
       ],
-      description: "Watch this is a test",
-    };
-    if (MiniKit.isInstalled()) {
-      return await MiniKit.commandsAsync.pay(payload);
-    }
-    return null;
-  } catch (error: unknown) {
-    console.log("Error sending payment", error);
-    return null;
-  }
+    });
+  return finalPayload;
 };
 
 const handlePay = async () => {
@@ -46,27 +28,8 @@ const handlePay = async () => {
     console.error("MiniKit is not installed");
     return;
   }
-  const sendPaymentResponse = await sendPayment();
-  const response = sendPaymentResponse?.finalPayload;
-  if (!response) {
-    return;
-  }
-
-  if (response.status == "success") {
-    const res = await fetch(`${process.env.NEXTAUTH_URL}/api/confirm-payment`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ payload: response }),
-    });
-    const payment = await res.json();
-    if (payment.success) {
-      // Congrats your payment was successful!
-      console.log("SUCCESS!");
-    } else {
-      // Payment failed
-      console.log("FAILED!");
-    }
-  }
+  const finalPayload = await sendTransactionCommand();
+  console.log(finalPayload.transaction_id);
 };
 
 export const PayBlock = () => {
