@@ -4,7 +4,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {ByteHasher} from "./helpers/ByteHasher.sol";
 import {IWorldID} from "./interfaces/IWorldID.sol";
 
-contract PredictionGame {
+contract Predict {
     using ByteHasher for bytes;
 
     /// @notice Thrown when attempting to reuse a nullifier
@@ -58,16 +58,16 @@ contract PredictionGame {
     event AnswerSubmitted(uint256 gameId, int256 correctAnswer, address winner);
 
     constructor(
-        IWorldID _worldId,
+        address _worldId,
         string memory _appId,
         string memory _actionId,
-        IERC20 _usdc
+        address _usdc
     ) {
-        worldId = _worldId;
+        worldId = IWorldID(_worldId);
         externalNullifier = abi
             .encodePacked(abi.encodePacked(_appId).hashToField(), _actionId)
             .hashToField();
-        usdc = _usdc;
+        usdc = IERC20(_usdc);
     }
 
     modifier beforeDeadline(uint256 gameId) {
@@ -100,15 +100,14 @@ contract PredictionGame {
         usdc.transferFrom(msg.sender, address(this), prize);
 
         uint256 gameId = gameIdCounter++;
-        games[gameId] = Game({
-            creator: msg.sender,
-            question: question,
-            deadline: deadline,
-            prize: prize,
-            hasAnswer: false,
-            correctAnswer: 0,
-            winner: address(0)
-        });
+        Game storage game = games[gameId];
+        game.creator = msg.sender;
+        game.question = question;
+        game.deadline = deadline;
+        game.prize = prize;
+        game.hasAnswer = false;
+        game.correctAnswer = 0;
+        game.winner = address(0);
 
         emit GameCreated(gameId, msg.sender, question, deadline, prize);
     }
@@ -124,7 +123,7 @@ contract PredictionGame {
         uint256 nullifierHash,
         uint256[8] calldata proof,
         uint256 gameId,
-        int256 answer,
+        int256 answer
     ) public {
         // First, we make sure this person hasn't done this before
         if (nullifierHashes[nullifierHash])

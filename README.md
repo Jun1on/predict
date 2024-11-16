@@ -1,18 +1,7 @@
-## This template provides a minimal setup to get Next.js working with MiniKit
+Predict is a free-to-play prediction market where every human gets one guess.
 
-## Setup
+[Try the Mini App](https://worldcoin.org/mini-app?app_id=app_e11ef22c71e3086c308c0352221c327c)  
+or scan the QR code below:  
+![qr](https://github.com/user-attachments/assets/4c06458e-87b5-42d2-a682-b39626494f5e)
 
-```bash
-cp .env.example .env
-pnpm i
-pnpm dev
-
-```
-
-To run as a mini app choose a production app in the dev portal and use NGROK to tunnel. Set the `NEXTAUTH_URL` and the redirect url if using sign in with worldcoin to that ngrok url
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-View docs: [Docs](https://minikit-docs.vercel.app/mini-apps)
-
-[Developer Portal](https://developer.worldcoin.org/)
+Contracts deployed to worldchain mainnet: `0xbd58446e1862e3321bcd64e209fefbd3a07fdcfc`
