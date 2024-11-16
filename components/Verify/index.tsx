@@ -14,20 +14,17 @@ export type VerifyCommandInput = {
   verification_level?: VerificationLevel; // Default: Orb
 };
 
-const verifyPayload: VerifyCommandInput = {
-  action: "guess", // This is your action ID from the Developer Portal
-  signal: "",
-  verification_level: VerificationLevel.Orb, // Orb | Device
-};
-
-export const VerifyBlock = ({ setVerifiedProof }) => {
+export const VerifyBlock = ({ id, setVerifiedProof }) => {
   const handleVerify = useCallback(async () => {
     if (!MiniKit.isInstalled()) {
       console.warn("Tried to invoke 'verify', but MiniKit is not installed.");
       return null;
     }
 
-    const { finalPayload } = await MiniKit.commandsAsync.verify(verifyPayload);
+    const { finalPayload } = await MiniKit.commandsAsync.verify({
+      action: "guess",
+      signal: id.toString(),
+    });
 
     if (finalPayload.status === "error") return;
 

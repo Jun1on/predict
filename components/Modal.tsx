@@ -73,7 +73,7 @@ export default function Modal({ market, onClose }) {
           <div className="text-center text-white">
             <h2 className="text-xl font-bold mb-4">Verification Required</h2>
             <p className="mb-4">Verify with World to make a prediction.</p>
-            <VerifyBlock setVerifiedProof={setVerifiedProof} />
+            <VerifyBlock id={market.id} setVerifiedProof={setVerifiedProof} />
           </div>
         ) : guessed !== "" ? (
           <div className="text-center text-white">
