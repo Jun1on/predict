@@ -6,7 +6,16 @@ export const SignIn = () => {
   if (session) {
     return (
       <>
-        Signed in as {session?.user?.name?.slice(0, 10)} <br />
+        <button onClick={() => signOut()}>
+          <a
+            href={`https://worldchain-mainnet.explorer.alchemy.com/address/${session?.user?.name}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {session?.user?.name?.slice(0, 6)}
+          </a>
+        </button>
+        <br />
         <button onClick={() => signOut()}>Sign out</button>
       </>
     );
