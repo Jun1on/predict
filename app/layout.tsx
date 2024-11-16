@@ -29,11 +29,11 @@ export default function RootLayout({
         <link rel="icon" href="/icon.png" type="image/png" />
       </head>
       <NextAuthProvider>
-        {/* <ErudaProvider> */}
-        <MiniKitProvider>
-          <body className={inter.className}>{children}</body>
-        </MiniKitProvider>
-        {/* </ErudaProvider> */}
+        <ErudaProvider>
+          <MiniKitProvider>
+            <body className={inter.className}>{children}</body>
+          </MiniKitProvider>
+        </ErudaProvider>
       </NextAuthProvider>
     </html>
   );

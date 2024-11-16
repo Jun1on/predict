@@ -21,7 +21,7 @@ export default function Home() {
         </h1>
         <SignIn />
       </div>
-      <div className="grid grid-cols-[repeat(auto-fill,_minmax(200px,_1fr))] gap-5 px-5 overflow-y-scroll h-[80vh]">
+      <div className="grid grid-cols-[repeat(auto-fill,_minmax(200px,_1fr))] gap-5 px-5 overflow-y-scroll">
         {markets.map((market) => (
           <MarketComponent
             key={market.id}
